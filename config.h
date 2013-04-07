@@ -173,6 +173,8 @@ static Key keys[] = {
     { MODKEY|ShiftMask|ControlMask, XK_q,         spawn,          {.v = quitcmd } },     // dmenu-quit                    Ctrl+Shift+Alt+q
 };
 
+#include "tilemovemouse.c"
+
 /* button definitions */
 /* click can be ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
@@ -184,7 +186,7 @@ static Button buttons[] = {
     /* on client title */
 	{ ClkWinTitle,       0,           Button1,    zoom,           {0} },                 // put client in master          B1 on client title
 	/* on client window */
-    { ClkClientWin,      MODKEY,      Button1,    movemouse,      {0} },                 // move client                   Alt+B1 on client
+    { ClkClientWin,      MODKEY,      Button1,    tilemovemouse,      {0} },                 // move client                   Alt+B1 on client
 	{ ClkClientWin,      MODKEY,      Button2,    togglefloating, {0} },                 // toggle floating               Alt+B2 on client
 	{ ClkClientWin,      MODKEY,      Button3,    resizemouse,    {0} },                 // resize client                 Alt+B3 on client
 	/* on tagbar */
