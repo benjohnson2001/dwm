@@ -30,6 +30,9 @@ static const Bool showbar                = True;      // False means no bar
 static const Bool topbar                 = False;     // False means bottom bar
 static const char scratchpadname[]       = "scratch"; // scratchpad window title
 
+/* False means using the scroll wheel on a window will not change focus */
+static const Bool focusonwheelscroll = False;
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 

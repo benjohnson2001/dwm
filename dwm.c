@@ -287,7 +287,6 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	[ConfigureRequest] = configurerequest,
 	[ConfigureNotify] = configurenotify,
 	[DestroyNotify] = destroynotify,
-	[EnterNotify] = enternotify,
 	[Expose] = expose,
 	[FocusIn] = focusin,
 	[KeyPress] = keypress,
@@ -537,7 +536,9 @@ buttonpress(XEvent *e) {
 		}
 	}
 	else if((c = wintoclient(ev->window))) {
-		focus(c);
+		if (focusonwheelscroll || (ev->button != Button4 && ev->button != Button5))
+			focus(c);
+		XAllowEvents(dpy, ReplayPointer, CurrentTime);
 		click = ClkClientWin;
 	}
 	for(i = 0; i < LENGTH(buttons); i++)
