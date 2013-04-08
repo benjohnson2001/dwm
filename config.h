@@ -184,9 +184,11 @@ static Button buttons[] = {
 	{ ClkLtSymbol,       0,           Button2,    setlayout,      {.v = &layouts[1]} },  // set layout 1 bstack           B2 on layout symbol
 	{ ClkLtSymbol,       0,           Button3,    setlayout,      {.v = &layouts[2]} },  // set layout 2 monocle          B3 on layout symbol
     /* on client title */
-	{ ClkWinTitle,       0,           Button1,    zoom,           {0} },                 // put client in master          B1 on client title
+//	{ ClkWinTitle,       0,           Button1,    zoom,           {0} },                 // put client in master          B1 on client title
+    { ClkWinTitle,       0,           Button1,    focusonclick,   {0} },
+    { ClkWinTitle,       0,           Button3,    closeonclick,   {0} },
 	/* on client window */
-    { ClkClientWin,      MODKEY,      Button1,    tilemovemouse,      {0} },                 // move client                   Alt+B1 on client
+    { ClkClientWin,      MODKEY,      Button1,    tilemovemouse,  {0} },                 // move client in tiles          Alt+B1 on client
 	{ ClkClientWin,      MODKEY,      Button2,    togglefloating, {0} },                 // toggle floating               Alt+B2 on client
 	{ ClkClientWin,      MODKEY,      Button3,    resizemouse,    {0} },                 // resize client                 Alt+B3 on client
 	/* on tagbar */

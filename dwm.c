@@ -90,6 +90,7 @@ struct Client {
 	int oldx, oldy, oldw, oldh;
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
 	int bw, oldbw;
+	int tw;
 	unsigned int tags;
 	Bool isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
 	Client *next;
@@ -145,6 +146,8 @@ struct Monitor {
 	Monitor *next;
 	Window barwin;
 	const Layout *lt[2];
+	int titlebarbegin;
+	int titlebarend;
 	Pertag *pertag;
 };
 
@@ -172,6 +175,7 @@ static void cleanup(void);
 static void cleanupmon(Monitor *mon);
 static void clearurgent(Client *c);
 static void clientmessage(XEvent *e);
+static void closeonclick(const Arg *arg);
 static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
@@ -189,6 +193,7 @@ static void drawtext(const char *text, unsigned long col[ColLast], Bool invert);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
+static void focusonclick(const Arg *arg);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
@@ -524,10 +529,12 @@ buttonpress(XEvent *e) {
 		}
 		else if(ev->x < x + blw)
 			click = ClkLtSymbol;
-		else if(ev->x > selmon->ww - TEXTW(stext))
+		else if(ev->x > selmon->titlebarend)
 			click = ClkStatusText;
-		else
+		else {
+			arg.ui = ev->x;
 			click = ClkWinTitle;
+		}
 	}
 	else if((c = wintoclient(ev->window))) {
 		focus(c);
@@ -536,7 +543,7 @@ buttonpress(XEvent *e) {
 	for(i = 0; i < LENGTH(buttons); i++)
 		if(click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
 		&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
-			buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
+			buttons[i].func((click == ClkTagBar || click == ClkWinTitle) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
 }
 
 void
@@ -623,6 +630,52 @@ clientmessage(XEvent *e) {
 		}
 		pop(c);
 	}
+}
+
+void
+closeonclick(const Arg *arg) {
+	int x, w, mw = 0, tw, n = 0, i = 0, extra = 0;
+    Monitor *m = selmon;
+    Client *c, *firstvis;
+        
+
+	for(c = m->clients; c && !ISVISIBLE(c); c = c->next);
+	firstvis = c;
+
+	for(c = m->clients; c; c = c->next)
+		if (ISVISIBLE(c))
+		    n++;
+
+	if(n > 0) {
+		mw = (m->titlebarend - m->titlebarbegin) / n;
+		c = firstvis;
+		while(c) {
+            tw = TEXTW(c->name);
+            if(tw < mw) extra += (mw - tw); else i++;
+            for(c = c->next; c && !ISVISIBLE(c); c = c->next);
+ 		}
+		if(i > 0) mw += extra / i;
+	}
+
+	x=m->titlebarbegin;
+
+	c = firstvis;
+        while(x < m->titlebarend) {
+		if(c) {
+			w = MIN(TEXTW(c->name), mw);
+			if (x < arg->i && x+w > arg->i) {
+				focus(c);
+				restack(selmon);
+                killclient(0);
+				break;
+			} else
+				x+=w;
+
+			for(c = c->next; c && !ISVISIBLE(c); c = c->next);
+		} else {
+			break;
+		}
+            }
 }
 
 void
@@ -847,9 +900,13 @@ drawbar(Monitor *m) {
 			dc.w = m->ww - x;
 		}
 		drawtext(stext, dc.norm, False);
+		m->titlebarend=dc.x;
 	}
-	else
+	else {	
 		dc.x = m->ww;
+		m->titlebarbegin=dc.x;
+	}
+	
 	for(c = m->clients; c && !ISVISIBLE(c); c = c->next);
 	firstvis = c;
 
@@ -875,6 +932,8 @@ drawbar(Monitor *m) {
 		c = firstvis;
 		x = dc.x;
 	}
+
+    m->titlebarbegin=dc.x;
 
 	while(dc.w > bh) {
 		if(c) {
@@ -1021,6 +1080,50 @@ focus(Client *c) {
 	selmon->sel = c;
 	drawbars();
 }
+
+void
+focusonclick(const Arg *arg) {
+	int x, w, mw = 0, tw, n = 0, i = 0, extra = 0;
+   	Monitor *m = selmon;
+   	Client *c, *firstvis;
+
+   	for(c = m->clients; c && !ISVISIBLE(c); c = c->next);
+   	firstvis = c;
+   
+   	for(c = m->clients; c; c = c->next)
+    	if (ISVISIBLE(c))
+        	n++;
+   
+   	if(n > 0) {
+       	mw = (m->titlebarend - m->titlebarbegin) / n;
+       	c = firstvis;
+       	while(c) {
+           	tw = TEXTW(c->name);
+           	if(tw < mw) extra += (mw - tw); else i++;
+           	for(c = c->next; c && !ISVISIBLE(c); c = c->next);
+       	}
+       	if(i > 0) mw += extra / i;
+   	}
+
+   	x=m->titlebarbegin;
+
+   	c = firstvis;
+    		while(x < m->titlebarend) {
+       	if(c) {
+        	w=MIN(TEXTW(c->name), mw);
+           	if (x < arg->i && x+w > arg->i) {
+            	focus(c);
+               	restack(selmon);
+               	break;
+           	} else
+            	x+=w;
+          
+           	for(c = c->next; c && !ISVISIBLE(c); c = c->next);
+		} else {
+        	break;
+		}  
+			} 
+}      
 
 void
 focusin(XEvent *e) { /* there are some broken focus acquiring clients */
