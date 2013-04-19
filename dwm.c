@@ -190,7 +190,6 @@ static void drawbars(void);
 static void drawline(unsigned long col[ColLast]);
 static void drawsquare(Bool filled, Bool empty, Bool invert, unsigned long col[ColLast]);
 static void drawtext(const char *text, unsigned long col[ColLast], Bool invert);
-static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusonclick(const Arg *arg);
@@ -1023,25 +1022,6 @@ drawtext(const char *text, unsigned long col[ColLast], Bool invert) {
 		XmbDrawString(dpy, dc.drawable, dc.font.set, dc.gc, x, y, buf, len);
 	else
 		XDrawString(dpy, dc.drawable, dc.gc, x, y, buf, len);
-}
-
-void
-enternotify(XEvent *e) {
-	Client *c;
-	Monitor *m;
-	XCrossingEvent *ev = &e->xcrossing;
-
-	if((ev->mode != NotifyNormal || ev->detail == NotifyInferior) && ev->window != root)
-		return;
-	c = wintoclient(ev->window);
-	m = c ? c->mon : wintomon(ev->window);
-	if(m != selmon) {
-		unfocus(selmon->sel, True);
-		selmon = m;
-	}
-	else if(!c || c == selmon->sel)
-		return;
-	focus(c);
 }
 
 void

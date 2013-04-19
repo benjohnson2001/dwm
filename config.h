@@ -12,6 +12,10 @@
  * cycle-layout         https://bbs.archlinux.org/viewtopic.php?id=103402
  * view_prev/next_tag   forum post
  * arpinux@2012 <http://arpinux.org>
+ * 
+ * tilemovemouse
+ * fancybarclickable
+ * closeonclick
 */
 
 /* appearance */
@@ -25,7 +29,7 @@ static const char selfgcolor[]           = "#C7C7C7"; // grey
 static const char floatnormbordercolor[] = "#222222";
 static const char floatselbordercolor[]  = "#FFA000"; // orange
 static const unsigned int borderpx       = 1;         // border pixel of windows
-static const unsigned int snap           = 32;        // snap pixel
+static const unsigned int snap           = 8;        // snap pixel
 static const Bool showbar                = True;      // False means no bar
 static const Bool topbar                 = False;     // False means bottom bar
 static const char scratchpadname[]       = "scratch"; // scratchpad window title
@@ -47,7 +51,6 @@ static const Rule rules[] = {
 	{ "luakit",        NULL,    NULL,               1<<1,   False,        0 }, // luakit on tag 2
 	{ NULL,            NULL,    "weechat 0.3.2",    1<<2,   False,       -1 }, // weechat on tag 3
 	{ NULL,            NULL,    "vim",              1<<3,   False,       -1 }, // vim on tag 4
-    { "Geany",         NULL,    NULL,               1<<3,   False,       -1 }, // geany on tag 4
 	{ "Gimp",          NULL,    NULL,               1<<4,   True,        -1 }, // gimp free on tag 5
 	{ "Filezilla",     NULL,    NULL,               1<<7,   False,       -1 }, // filezilla on tag 8
 	{ "Transmission",  NULL,    NULL,               1<<8,   False,        0 }, // transmission on tag 9
@@ -68,6 +71,7 @@ static const Rule rules[] = {
 	{ "Rox",           NULL,    "Set icon",         0,      True,        -1 },
 	{ "Savebox",       NULL,    NULL,               0,      True,        -1 },
 	{ NULL,            NULL,    "Downloads",        0,      True,        -1 },
+    { "Pcmanfm",       NULL,    NULL,               0,      True,        -1 },
 };
 
 /* layout(s) */
