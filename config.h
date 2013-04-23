@@ -75,7 +75,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact      = 0.65;  // factor of master area size [0.05..0.95]
+static const float mfact      = 0.50;  // factor of master area size [0.05..0.95]
 static const int nmaster      = 1;     // number of clients in master area
 static const Bool resizehints = False; // True means respect size hints in tiled resizals
 
@@ -148,6 +148,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,         incnmaster,     {.i = -1 } },         // decrease clients in master     Alt+d
 	{ MODKEY,                       XK_h,         setmfact,       {.f = -0.05} },       // decrease master area           Alt+h
 	{ MODKEY,                       XK_l,         setmfact,       {.f = +0.05} },       // increase master area           Alt+l
+	{ MODKEY|ShiftMask,             XK_h,         setmfact,       {.f = -0.001} },      // decrease master area by 1px    Shift+Alt+h
+	{ MODKEY|ShiftMask,             XK_l,         setmfact,       {.f = +0.001} },      // increase master area by 1px    Shift+Alt+l
 	{ MODKEY,                       XK_Return,    zoom,           {0} },                // put client in master           Alt+Return
 	{ MODKEY,                       XK_Tab,       view,           {0} },                // swap last selected tag         Alt+Tab
 	{ MODKEY,                       XK_q,         killclient,     {0} },                // kill client                    Alt+q
