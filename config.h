@@ -48,7 +48,6 @@ static const Rule rules[] = {
 	/* class          instance  title          tags mask    isfloating   monitor */
 	{ "Claws-mail",    NULL,    NULL,               1<<0,   False,        0 }, // claws-mail on tag 1
 	{ "Firefox",       NULL,    NULL,               1<<1,   False,        0 }, // firefox on tag 2
-	{ "luakit",        NULL,    NULL,               1<<1,   False,        0 }, // luakit on tag 2
 	{ NULL,            NULL,    "weechat 0.3.2",    1<<2,   False,       -1 }, // weechat on tag 3
 	{ NULL,            NULL,    "vim",              1<<3,   False,       -1 }, // vim on tag 4
 	{ "Gimp",          NULL,    NULL,               1<<4,   True,        -1 }, // gimp free on tag 5
@@ -56,20 +55,6 @@ static const Rule rules[] = {
 	{ "Transmission",  NULL,    NULL,               1<<8,   False,        0 }, // transmission on tag 9
 	{ "XCalc",         NULL,    NULL,               0,      True,        -1 }, // xcalc free notag
 	{ "Lpx2",          NULL,    NULL,               0,      True,        -1 }, // pix-viewer free notag
-	{ "MPlayer",       "xv",    NULL,               0,      True,        -1 }, // mplayer free notag
-	{ "MPlayer",       "x11",   NULL,               0,      True,        -1 }, // mplayer free notag
-	{ "Gnome-mplayer", NULL,    NULL,               0,      True,        -1 },
-	{ "File-roller",   NULL,    NULL,               0,      True,        -1 },
-	{ "Zenity",        NULL,    NULL,               0,      True,        -1 },
-	{ "Yad",           NULL,    NULL,               0,      True,        -1 },
-	{ NULL,            NULL,    "watch",            0,      True,        -1 },
-	{ NULL,            NULL,    "sound",            0,      True,        -1 },
-	{ "Rox",           NULL,    "Copy",             0,      True,        -1 },
-	{ "Rox",           NULL,    "Delete",           0,      True,        -1 },
-	{ "Rox",           NULL,    "Move",             0,      True,        -1 },
-	{ "Rox",           NULL,    "Options",          0,      True,        -1 },
-	{ "Rox",           NULL,    "Set icon",         0,      True,        -1 },
-	{ "Savebox",       NULL,    NULL,               0,      True,        -1 },
 	{ NULL,            NULL,    "Downloads",        0,      True,        -1 },
     { "Pcmanfm",       NULL,    NULL,               0,      True,        -1 },
 };
@@ -104,15 +89,15 @@ static const Layout layouts[] = {
 static const char *dmenucmd[] = { "dmenu_run", "-b", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, "-p", "exec:", NULL };
 static const char *termcmd[]  = { "urxvtc", NULL };                                       // terminal
 static const char *scratcmd[] = { "urxvtc", "-T", "scratch", "-geometry", "90x9", NULL }; // scratchpad
-static const char *roxcmd[]   = { "rox", NULL };                                          // gui file-manager
-static const char *filecmd[]  = { "urxvtc", "-e", "ranger", NULL };                       // cli file-manager
-static const char *editcmd[]  = { "urxvtc", "-T", "vim", "-e", "vim", NULL };             // cli editor
 static const char *geanycmd[] = { "geany", NULL };                                        // gui editor
-static const char *volcmd[]   = { "urxvtc", "-T", "sound", "-e", "alsamixer", NULL };     // volume mixer
-static const char *luakcmd[]  = { "luakit", ".startpage/index.html", NULL };              // surf the web with luakit
-static const char *webcmd[]   = { "firefox", ".startpage/index.html", NULL };             // surf the web with firefox
-static const char *chatcmd[]  = { "urxvtc", "-e", "screen", "weechat-curses", NULL };     // open weechat irc client in screen/urxvtc
-static const char *zikcmd[]   = { "urxvtc", "-T", "zik-player", "-e", "mocp", NULL };     // open mocp in urxvtc
+
+static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+0-0", "--",  // launch thingmenu
+                                         "H", "pcmanfm &",
+                                         "E", "geany &", 
+                                         "I", "midori &", NULL };           
+                                         
+static const char *thingmenu_stop[] = { "killall",  "thingmenu", NULL };                     // kill thingmenu
+
 /* menus */
 static const char *deskmenu[] = { "compiz-deskmenu", NULL };
 static const char *homecmd[]  = { "dmenu-home.sh", NULL };
@@ -121,6 +106,8 @@ static const char *quitcmd[]  = { "dmenu-quit.sh", NULL };
 
 static Key keys[] = {
 	/* modifier                     key           function        argument */
+    { 0,                            0,            spawn,          {.v = thingmenu_start } },
+    { 0,                            0,            spawn,          {.v = thingmenu_stop  } },   
     /* menus */
     { MODKEY,                       XK_p,         spawn,          {.v = dmenucmd } },   // dmenu           Alt+p
     { MODKEY2,                      XK_d,         spawn,          {.v = dmenucmd } },   // dmenu           Super+d
@@ -129,15 +116,7 @@ static Key keys[] = {
     /* applications */
     { 0,                            XK_F12,       togglescratch,  {.v = scratcmd} },    // scratchpad      F12
     { ControlMask,                  XK_Return,    spawn,          {.v = termcmd } },    // terminal        Ctrl+Return
-    { MODKEY,                       XK_w,         spawn,          {.v = luakcmd } },    // luakit          Alt+w
-    { MODKEY|ShiftMask,             XK_w,         spawn,          {.v = webcmd } },     // firefox         Alt+Shift+w
-	{ MODKEY,                       XK_r,         spawn,          {.v = filecmd } },    // ranger          Alt+r
-	{ MODKEY|ShiftMask,             XK_r,         spawn,          {.v = roxcmd } },     // rox-filer       Alt+Shift+r
-	{ MODKEY,                       XK_e,         spawn,          {.v = editcmd } },    // vim in urxvtc   Alt+e
 	{ MODKEY|ShiftMask,             XK_e,         spawn,          {.v = geanycmd } },   // geany           Alt+Shift+e
-	{ MODKEY,                       XK_v,         spawn,          {.v = volcmd } },     // volume mixer    Alt+v
-	{ MODKEY,                       XK_z,         spawn,          {.v = zikcmd } },     // zik player      Alt+z
-	{ MODKEY,                       XK_x,         spawn,          {.v = chatcmd } },    // irc client      Alt+x
     /* navigation */
 	{ MODKEY,                       XK_b,         togglebar,      {0} },                // toggle bar visibility          Alt+b
 	{ MODKEY,                       XK_j,         focusstack,     {.i = +1 } },         // focus next client              Alt+j

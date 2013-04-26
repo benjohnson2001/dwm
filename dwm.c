@@ -305,6 +305,8 @@ static DC dc;
 static Monitor *mons = NULL, *selmon = NULL;
 static Window root;
 
+int icon_hide = 0;
+
 /* configuration, allows nested code to access above variables */
 #include "config.h"
 
@@ -1390,7 +1392,7 @@ manage(Window w, XWindowAttributes *wa) {
 	if(strcmp(c->name, scratchpadname) == 0) {
 		c->tags = scratchpadtag;
 		c->isfloating = True;
-		c->x = (c->mon->mw - c->w) - 10;
+		c->x = (c->mon->mw - c->w) - 30;
 		c->y = 20;
 		c->mon->tagset[c->mon->seltags] |= c->tags;
 	} else { /* make sure non-scratchpads stay out of scratchpadtag */
@@ -1989,6 +1991,8 @@ setup(void) {
 	XChangeWindowAttributes(dpy, root, CWEventMask|CWCursor, &wa);
 	XSelectInput(dpy, root, wa.event_mask);
 	grabkeys();
+
+    keys[0].func(&(keys[0].arg));   // thingmenu_start
 }
 
 void
@@ -2082,6 +2086,14 @@ tile(Monitor *m) {
 
 void
 togglebar(const Arg *arg) {
+    
+    if (!icon_hide)
+        keys[1].func(&(keys[1].arg));   // thingmenu_stop
+    else
+        keys[0].func(&(keys[0].arg));   // thingmenu_start    
+        
+    icon_hide = !icon_hide;    
+    
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
 	updatebarpos(selmon);
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + ICON_OFFSET, selmon->by, selmon->ww, bh);
