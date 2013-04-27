@@ -56,7 +56,7 @@
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #define TEXTW(X)                (textnw(X, strlen(X)) + dc.font.height)
 #define ICONS                   3
-#define ICON_OFFSET             (ICONS*13)
+#define ICON_OFFSET             (ICONS*12)
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast };            /* cursor */
@@ -717,7 +717,7 @@ configurenotify(XEvent *e) {
 			dc.drawable = XCreatePixmap(dpy, root, sw, bh, DefaultDepth(dpy, screen));
 			updatebars();
 			for(m = mons; m; m = m->next)
-				XMoveResizeWindow(dpy, m->barwin, m->wx + ICON_OFFSET, m->by, m->ww, bh);
+				XMoveResizeWindow(dpy, m->barwin, m->wx + ICON_OFFSET, m->by, m->ww - ICON_OFFSET, bh);
 			focus(NULL);
 			arrange(NULL);
 		}
@@ -759,7 +759,7 @@ configurerequest(XEvent *e) {
 			if((ev->value_mask & (CWX|CWY)) && !(ev->value_mask & (CWWidth|CWHeight)))
 				configure(c);
 			if(ISVISIBLE(c))
-				XMoveResizeWindow(dpy, c->win, c->x + ICON_OFFSET, c->y, c->w, c->h);
+				XMoveResizeWindow(dpy, c->win, c->x + ICON_OFFSET, c->y, c->w - ICON_OFFSET, c->h);
 		}
 		else
 			configure(c);
@@ -898,9 +898,9 @@ drawbar(Monitor *m) {
 	x = dc.x;
 	if(m == selmon) { /* status is only drawn on selected monitor */
 		dc.w = TEXTW(stext);
-		dc.x = m->ww - dc.w;
+		dc.x = m->ww - dc.w - ICON_OFFSET;
 		if(dc.x < x) {
-			dc.x = x;
+			dc.x = x - ICON_OFFSET;
 			dc.w = m->ww - x;
 		}
 		drawtext(stext, dc.norm, False);
@@ -1418,7 +1418,7 @@ manage(Window w, XWindowAttributes *wa) {
 	attachstack(c);
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 	                (unsigned char *) &(c->win), 1);
-	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw + ICON_OFFSET, c->y, c->w, c->h); /* some windows require this */
+	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw + ICON_OFFSET, c->y, c->w - ICON_OFFSET, c->h); /* some windows require this */
 	setclientstate(c, NormalState);
 	if (c->mon == selmon)
 		unfocus(selmon->sel, False);
@@ -2096,7 +2096,7 @@ togglebar(const Arg *arg) {
     
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
 	updatebarpos(selmon);
-	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + ICON_OFFSET, selmon->by, selmon->ww, bh);
+	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + ICON_OFFSET, selmon->by, selmon->ww - ICON_OFFSET, bh);
 	arrange(selmon);
 }
 
@@ -2244,7 +2244,7 @@ updatebars(void) {
 	for(m = mons; m; m = m->next) {
 		if (m->barwin)
 			continue;
-		m->barwin = XCreateWindow(dpy, root, m->wx + ICON_OFFSET, m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
+		m->barwin = XCreateWindow(dpy, root, m->wx + ICON_OFFSET, m->by, m->ww - ICON_OFFSET, bh, 0, DefaultDepth(dpy, screen),
 		                          CopyFromParent, DefaultVisual(dpy, screen),
 		                          CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]);
