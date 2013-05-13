@@ -132,6 +132,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return,    zoom,           {0} },                // put client in master           Alt+Return
 	{ MODKEY,                       XK_Tab,       view,           {0} },                // swap last selected tag         Alt+Tab
 	{ MODKEY,                       XK_q,         killclient,     {0} },                // kill client                    Alt+q
+	{ MODKEY|ControlMask,           XK_q,         killclients,    {0} },                // kill clients in workspace      Ctrl+Alt+q
 	{ MODKEY,                       XK_t,         setlayout,      {.v = &layouts[0]} }, // set layout 0 tile              Alt+t
 	{ MODKEY,                       XK_s,         setlayout,      {.v = &layouts[1]} }, // set layout 1 bstack            Alt+s
 	{ MODKEY,                       XK_m,         setlayout,      {.v = &layouts[2]} }, // set layout 2 monocle           Alt+m

@@ -208,6 +208,7 @@ static void incnmaster(const Arg *arg);
 static void initfont(const char *fontstr);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
+static void killclients(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -1352,6 +1353,49 @@ killclient(const Arg *arg) {
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+}
+
+void
+killclients(const Arg *arg) {
+	int x, w, mw = 0, tw, n = 0, i = 0, extra = 0;
+    Monitor *m = selmon;
+    Client *c, *firstvis;
+
+
+	for(c = m->clients; c && !ISVISIBLE(c); c = c->next);
+	firstvis = c;
+
+	for(c = m->clients; c; c = c->next)
+		if (ISVISIBLE(c))
+		    n++;
+
+	if(n > 0) {
+		mw = (m->titlebarend - m->titlebarbegin) / n;
+		c = firstvis;
+		while(c) {
+            tw = TEXTW(c->name);
+            if(tw < mw) extra += (mw - tw); else i++;
+            for(c = c->next; c && !ISVISIBLE(c); c = c->next);
+ 		}
+		if(i > 0) mw += extra / i;
+	}
+
+	x=m->titlebarbegin;
+
+	c = firstvis;
+        while(x < m->titlebarend) {
+		if(c) {
+			w = MIN(TEXTW(c->name), mw);
+			focus(c);
+			restack(selmon);
+			killclient(0);
+
+			for(c = c->next; c && !ISVISIBLE(c); c = c->next);
+		} else {
+			break;
+		}
+            }
+
 }
 
 void
