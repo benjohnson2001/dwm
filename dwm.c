@@ -717,7 +717,7 @@ configurenotify(XEvent *e) {
 			dc.drawable = XCreatePixmap(dpy, root, sw, bh, DefaultDepth(dpy, screen));
 			updatebars();
 			for(m = mons; m; m = m->next)
-				XMoveResizeWindow(dpy, m->barwin, m->wx + ICON_OFFSET, m->by, m->ww - ICON_OFFSET, bh);
+				XMoveResizeWindow(dpy, m->barwin, m->wx + ICON_OFFSET, m->by, m->ww, bh);
 			focus(NULL);
 			arrange(NULL);
 		}
@@ -759,7 +759,7 @@ configurerequest(XEvent *e) {
 			if((ev->value_mask & (CWX|CWY)) && !(ev->value_mask & (CWWidth|CWHeight)))
 				configure(c);
 			if(ISVISIBLE(c))
-				XMoveResizeWindow(dpy, c->win, c->x + ICON_OFFSET, c->y, c->w - ICON_OFFSET, c->h);
+				XMoveResizeWindow(dpy, c->win, c->x + ICON_OFFSET, c->y, c->w, c->h);
 		}
 		else
 			configure(c);
@@ -1418,7 +1418,7 @@ manage(Window w, XWindowAttributes *wa) {
 	attachstack(c);
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 	                (unsigned char *) &(c->win), 1);
-	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw + ICON_OFFSET, c->y, c->w - ICON_OFFSET, c->h); /* some windows require this */
+	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw + ICON_OFFSET, c->y, c->w, c->h); /* some windows require this */
 	setclientstate(c, NormalState);
 	if (c->mon == selmon)
 		unfocus(selmon->sel, False);
