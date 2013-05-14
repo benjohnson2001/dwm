@@ -47,7 +47,6 @@ static const Rule rules[] = {
 	 */
 	/* class          instance  title          tags mask    isfloating   monitor */
 	{ "Claws-mail",    NULL,    NULL,               1<<0,   False,        0 }, // claws-mail on tag 1
-	{ "Firefox",       NULL,    NULL,               1<<1,   False,        0 }, // firefox on tag 2
 	{ NULL,            NULL,    "weechat 0.3.2",    1<<2,   False,       -1 }, // weechat on tag 3
 	{ NULL,            NULL,    "vim",              1<<3,   False,       -1 }, // vim on tag 4
 	{ "Gimp",          NULL,    NULL,               1<<4,   True,        -1 }, // gimp free on tag 5
@@ -102,7 +101,6 @@ static const char *thingmenu_stop[] = { "killall",  "thingmenu", NULL };        
 static const char *deskmenu[] = { "compiz-deskmenu", NULL };
 static const char *homecmd[]  = { "dmenu-home.sh", NULL };
 static const char *googcmd[]  = { "dmenu-google.sh", NULL };
-static const char *quitcmd[]  = { "dmenu-quit.sh", NULL };
 
 static Key keys[] = {
 	/* modifier                     key           function        argument */
@@ -120,6 +118,7 @@ static Key keys[] = {
     /* navigation */
 	{ MODKEY,                       XK_b,         togglebar,      {0} },                // toggle bar visibility          Alt+b
 	{ MODKEY,                       XK_j,         focusstack,     {.i = +1 } },         // focus next client              Alt+j
+	{ MODKEY,                       XK_Tab,       focusstack,     {.i = +1 } },         // focus next client              Alt+Tab
 	{ MODKEY,                       XK_k,         focusstack,     {.i = -1 } },         // focus previous client          Alt+k
     { MODKEY|ControlMask,           XK_j,         pushdown,       {0} },                // move client down in clientlist Ctrl+Alt+j
     { MODKEY|ControlMask,           XK_k,         pushup,         {0} },                // move client up in clientlist   Ctrl+Alt+k
@@ -130,9 +129,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_h,         setmfact,       {.f = -0.001} },      // decrease master area by 1px    Shift+Alt+h
 	{ MODKEY|ShiftMask,             XK_l,         setmfact,       {.f = +0.001} },      // increase master area by 1px    Shift+Alt+l
 	{ MODKEY,                       XK_Return,    zoom,           {0} },                // put client in master           Alt+Return
-	{ MODKEY,                       XK_Tab,       view,           {0} },                // swap last selected tag         Alt+Tab
 	{ MODKEY,                       XK_q,         killclient,     {0} },                // kill client                    Alt+q
-	{ MODKEY|ControlMask,           XK_q,         killclients,    {0} },                // kill clients in workspace      Ctrl+Alt+q
+	{ MODKEY|ShiftMask,             XK_q,         killclients,    {0} },                // kill clients in workspace      Ctrl+Alt+q
 	{ MODKEY,                       XK_t,         setlayout,      {.v = &layouts[0]} }, // set layout 0 tile              Alt+t
 	{ MODKEY,                       XK_s,         setlayout,      {.v = &layouts[1]} }, // set layout 1 bstack            Alt+s
 	{ MODKEY,                       XK_m,         setlayout,      {.v = &layouts[2]} }, // set layout 2 monocle           Alt+m
@@ -147,8 +145,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Up,        focusmon,       {.i = +1 } },         // focus next screen              Alt+Up
 	{ MODKEY|ShiftMask,             XK_Down,      tagmon,         {.i = -1 } },         // tag previous screen            Alt+Shift+Down
 	{ MODKEY|ShiftMask,             XK_Up,        tagmon,         {.i = +1 } },         // tag next screen                Alt+Shift+Up
-    { ControlMask,                  XK_Left,      view_prev_tag,  {0} },                // previous tag                   Ctrl+Left
-    { ControlMask,                  XK_Right,     view_next_tag,  {0} },                // next tag                       Ctrl+Right
+	{ MODKEY,                       XK_Left,      view_prev_tag,  {0} },                // previous tag                   Alt+Left
+	{ MODKEY,                       XK_Right,     view_next_tag,  {0} },                // next tag                       Alt+Right
 	TAGKEYS(                        XK_1,                         0)
 	TAGKEYS(                        XK_2,                         1)                    // view tag [n]                   Alt+[n]
     TAGKEYS(                        XK_3,                         2)                    // tag [n] client                 Alt+Shift+[n]
@@ -158,8 +156,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                         6)
 	TAGKEYS(                        XK_8,                         7)
 	TAGKEYS(                        XK_9,                         8)
-	{ MODKEY|ShiftMask,             XK_q,         quit,           {0} },                 // exit/reload dwm               Alt+Shift+q
-    { MODKEY|ShiftMask|ControlMask, XK_q,         spawn,          {.v = quitcmd } },     // dmenu-quit                    Ctrl+Shift+Alt+q
+//	{ MODKEY|ControlMask,           XK_q,         quit,           {0} },                 // exit/reload dwm               Alt+Control+q
 };
 
 #include "tilemovemouse.c"

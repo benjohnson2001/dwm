@@ -223,7 +223,6 @@ static Client *prevtiled(Client *c);
 static void propertynotify(XEvent *e);
 static void pushdown(const Arg *arg);
 static void pushup(const Arg *arg);
-static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
 static void resize(Client *c, int x, int y, int w, int h, Bool interact);
 static void resizeclient(Client *c, int x, int y, int w, int h);
@@ -1708,12 +1707,12 @@ pushdown(const Arg *arg) {
 	focus(sel);
 	arrange(selmon);
 }
-
+/*
 void
 quit(const Arg *arg) {
 	running = False;
 }
-
+*/
 Monitor *
 recttomon(int x, int y, int w, int h) {
 	Monitor *m, *r = selmon;
