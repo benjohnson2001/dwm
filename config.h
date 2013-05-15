@@ -54,8 +54,6 @@ static const Rule rules[] = {
 	{ "Transmission",  NULL,    NULL,               1<<8,   False,        0 }, // transmission on tag 9
 	{ "XCalc",         NULL,    NULL,               0,      True,        -1 }, // xcalc free notag
 	{ "Lpx2",          NULL,    NULL,               0,      True,        -1 }, // pix-viewer free notag
-	{ NULL,            NULL,    "Downloads",        0,      True,        -1 },
-    { "Pcmanfm",       NULL,    NULL,               0,      True,        -1 },
 };
 
 /* layout(s) */
@@ -91,9 +89,9 @@ static const char *scratcmd[] = { "urxvtc", "-T", "scratch", "-geometry", "90x9"
 static const char *geanycmd[] = { "geany", NULL };                                        // gui editor
 
 static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+0-0", "--",  // launch thingmenu
-                                         "H", "pcmanfm &",
-                                         "E", "geany &", 
-                                         "I", "midori &", NULL };           
+                                         "h", "pcmanfm &",
+                                         "e", "geany &",
+                                         "i", "midori &", NULL };
                                          
 static const char *thingmenu_stop[] = { "killall",  "thingmenu", NULL };                     // kill thingmenu
 
