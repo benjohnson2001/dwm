@@ -55,8 +55,6 @@
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #define TEXTW(X)                (textnw(X, strlen(X)) + dc.font.height)
-#define ICONS                   3
-#define ICON_OFFSET             (ICONS*12)
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast };            /* cursor */

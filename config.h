@@ -19,7 +19,7 @@
 */
 
 /* appearance */
-static const char font[]                 = "snap";
+static const char font[]                 = "-*-terminusmodx.icons-*-*-*--12-*-*-*-*-*-*-*";
 static const char normbordercolor[]      = "#222222"; // dark grey
 static const char normbgcolor[]          = "#222222";
 static const char normfgcolor[]          = "#7D7D7D"; // clear grey
@@ -82,6 +82,9 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+#define ICONS                   4
+#define ICON_OFFSET             (ICONS*12)
+
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-b", "-fn", font, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, "-p", "exec:", NULL };
 static const char *termcmd[]  = { "urxvtc", NULL };                                       // terminal
@@ -91,7 +94,8 @@ static const char *geanycmd[] = { "geany", NULL };                              
 static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+0-0", "--",  // launch thingmenu
                                          "h", "pcmanfm &",
                                          "e", "geany &",
-                                         "i", "midori &", NULL };
+                                         "i", "firefox &",
+                                         "w", "wicd-client -n &", NULL };
                                          
 static const char *thingmenu_stop[] = { "killall",  "thingmenu", NULL };                     // kill thingmenu
 
