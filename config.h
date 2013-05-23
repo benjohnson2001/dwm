@@ -92,7 +92,7 @@ static const char *termcmd[]  = { "urxvtc", NULL };                             
 static const char *scratcmd[] = { "urxvtc", "-T", "scratch", "-geometry", "90x9", NULL }; // scratchpad
 static const char *geanycmd[] = { "geany", NULL };                                        // gui editor
 
-static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+0-0", "--",  // launch thingmenu
+static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+0-1", "--",  // launch thingmenu
                                          "h", "pcmanfm &",
                                          "e", "geany &",
                                          "i", "firefox &",
@@ -129,6 +129,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_j,         focusstack,     {.i = +1 } },         // focus next client              Alt+j
 	{ MODKEY,                       XK_Tab,       focusstack,     {.i = +1 } },         // focus next client              Alt+Tab
 	{ MODKEY,                       XK_k,         focusstack,     {.i = -1 } },         // focus previous client          Alt+k
+	{ MODKEY|ShiftMask,             XK_Tab,       focusstack,     {.i = -1 } },         // focus previous client          Alt+Shift+Tab
     { MODKEY|ControlMask,           XK_j,         pushdown,       {0} },                // move client down in clientlist Ctrl+Alt+j
     { MODKEY|ControlMask,           XK_k,         pushup,         {0} },                // move client up in clientlist   Ctrl+Alt+k
 	{ MODKEY,                       XK_i,         incnmaster,     {.i = +1 } },         // increase client in master      Alt+i
