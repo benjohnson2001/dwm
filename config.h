@@ -38,7 +38,7 @@ static const char scratchpadname[]       = "scratch"; // scratchpad window title
 static const Bool focusonwheelscroll = False;
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5" };
+static const char *tags[] = { "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -97,11 +97,13 @@ static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+
                                          "e", "geany &",
                                          "i", "firefox &",
                                          "w", "urxvt -title wicd -e sh -c \"wicd-curses 2> /dev/null\"", NULL };
-                                         
+
 static const char *thingmenu_stop[] = { "killall",  "thingmenu", NULL };                     // kill thingmenu
 
 static const char *clockmenu_start[] = {"clock-menu", NULL };
-static const char *clockmenu_stop[] = {"killall", "clockmenu", NULL };
+static const char *clockupdate_start[] = {"clock-update", NULL };
+
+static const char *clockmenu_stop[] = {"killall", "clockmenu", "&&", "killall", "clock-update",  NULL };
 
 /* menus */
 static const char *deskmenu[] = { "compiz-deskmenu", NULL };
@@ -115,6 +117,7 @@ static Key keys[] = {
     { 0,                            0,            spawn,          {.v = thingmenu_stop  } },
     { 0,                            0,            spawn,          {.v = clockmenu_start } },
     { 0,                            0,            spawn,          {.v = clockmenu_stop  } },
+    { 0,                            0,            spawn,          {.v = clockupdate_start } },
     /* menus */
     { MODKEY,                       XK_p,         spawn,          {.v = dmenucmd } },   // dmenu           Alt+p
     { MODKEY2,                      XK_d,         spawn,          {.v = dmenucmd } },   // dmenu           Super+d

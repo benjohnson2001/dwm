@@ -2035,6 +2035,7 @@ setup(void) {
 
     keys[0].func(&(keys[0].arg));   // thingmenu_start
     keys[2].func(&(keys[2].arg));   // clockmenu_start
+    keys[4].func(&(keys[4].arg));   // clockupdate_start
 
 }
 
@@ -2139,6 +2140,7 @@ togglebar(const Arg *arg) {
     {
         keys[0].func(&(keys[0].arg));   // thingmenu_start    
         keys[2].func(&(keys[2].arg));   // clockmenu_start
+        keys[4].func(&(keys[4].arg));   // clockupdate_start
     }
         
     icon_hide = !icon_hide;    
