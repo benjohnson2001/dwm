@@ -19,7 +19,7 @@
 */
 
 /* appearance */
-static const char font[]                 = "-*-terminusmodx.icons-*-*-*--12-*-*-*-*-*-*-*";
+static const char font[]                 = "-*-stlarch-medium-r-*-*-10-*-*-*-*-*-*-*" "," "-*-terminusmodx.icons-*-*-*--12-*-*-*-*-*-*-*";
 static const char normbordercolor[]      = "#222222"; // dark grey
 static const char normbgcolor[]          = "#222222";
 static const char normfgcolor[]          = "#7D7D7D"; // clear grey
@@ -54,6 +54,7 @@ static const Rule rules[] = {
 	{ "Transmission",  NULL,    NULL,               1<<8,   False,        0 }, // transmission on tag 9
 	{ "XCalc",         NULL,    NULL,               0,      True,        -1 }, // xcalc free notag
 	{ "Lpx2",          NULL,    NULL,               0,      True,        -1 }, // pix-viewer free notag
+	{ NULL,            NULL,    "cal",			    0,      True,        -1 }, // calendar is floating
 };
 
 /* layout(s) */
@@ -95,9 +96,12 @@ static const char *thingmenu_start[] = { "thingmenu", "-s", "-o", "-x", "-g", "+
                                          "h", "pcmanfm &",
                                          "e", "geany &",
                                          "i", "firefox &",
-                                         "w", "wicd-client -n &", NULL };
+                                         "w", "urxvt -title wicd -e sh -c \"wicd-curses 2> /dev/null\"", NULL };
                                          
 static const char *thingmenu_stop[] = { "killall",  "thingmenu", NULL };                     // kill thingmenu
+
+static const char *clockmenu_start[] = {"clock-menu", NULL };
+static const char *clockmenu_stop[] = {"killall", "clockmenu", NULL };
 
 /* menus */
 static const char *deskmenu[] = { "compiz-deskmenu", NULL };
@@ -106,8 +110,11 @@ static const char *googcmd[]  = { "dmenu-google.sh", NULL };
 
 static Key keys[] = {
 	/* modifier                     key           function        argument */
+	/* thingmenu launchers */
     { 0,                            0,            spawn,          {.v = thingmenu_start } },
-    { 0,                            0,            spawn,          {.v = thingmenu_stop  } },   
+    { 0,                            0,            spawn,          {.v = thingmenu_stop  } },
+    { 0,                            0,            spawn,          {.v = clockmenu_start } },
+    { 0,                            0,            spawn,          {.v = clockmenu_stop  } },
     /* menus */
     { MODKEY,                       XK_p,         spawn,          {.v = dmenucmd } },   // dmenu           Alt+p
     { MODKEY2,                      XK_d,         spawn,          {.v = dmenucmd } },   // dmenu           Super+d
